@@ -1,0 +1,69 @@
+{
+  "projectType": "sdk-library",
+  "projectName": "React QR Code",
+  "projectDescription": "A QR code generator component for React and React Native applications.",
+  "theme": "palm",
+  "primaryColor": "#000000",
+  "lightColor": "#3B82F6",
+  "darkColor": "#1E40AF",
+  "navigation": {
+    "groups": [
+      {
+        "group": "Get Started",
+        "pages": [
+          "introduction",
+          "installation",
+          "quickstart"
+        ]
+      },
+      {
+        "group": "Usage",
+        "pages": [
+          "usage/basic-usage",
+          "usage/styling",
+          "usage/responsive-design",
+          "usage/react-native"
+        ]
+      },
+      {
+        "group": "API Reference",
+        "pages": [
+          "api/qrcode-component",
+          "api/props"
+        ]
+      },
+      {
+        "group": "Advanced",
+        "pages": [
+          "advanced/utf8-support",
+          "advanced/error-correction",
+          "advanced/quiet-zone"
+        ]
+      },
+      {
+        "group": "Resources",
+        "pages": [
+          "changelog",
+          "contributing"
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Simple QRCode component for React and React Native",
+    "Full UTF-8 support for international text and emoji",
+    "Customizable colors, size, and error correction levels",
+    "SVG-based rendering with responsive design support",
+    "Cross-platform compatibility (Web, iOS, Android)"
+  ],
+  "publicApiSurface": [
+    "QRCode (default export)",
+    "value prop (required string)",
+    "size prop (number, default: 256)",
+    "bgColor prop (string, default: '#FFFFFF')",
+    "fgColor prop (string, default: '#000000')",
+    "level prop ('L' | 'M' | 'Q' | 'H', default: 'L')",
+    "title prop (string, web only)",
+    "All standard SVG props via spread"
+  ]
+}
