@@ -1,0 +1,304 @@
+---
+title: Responsive Design
+description: Create QR codes that scale perfectly across all screen sizes
+---
+
+## Responsive QR Code Pattern
+
+The recommended pattern from the README (lines 51-63) creates a QR code that scales with its container:
+
+```javascript
+// Can be anything instead of `maxWidth` that limits the width.
+<div style={{ height: "auto", margin: "0 auto", maxWidth: 64, width: "100%" }}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value={value}
+    viewBox={`0 0 256 256`}
+  />
+</div>
+```
+
+### How This Works
+
+**Container (`<div>`):**
+- `maxWidth: 64`: Limits the maximum size to 64px
+- `width: "100%"`: Fills available space up to maxWidth
+- `height: "auto"`: Maintains aspect ratio
+- `margin: "0 auto"`: Centers horizontally
+
+**QR Code (`<QRCode>`):**
+- `size={256}`: Sets the base/intrinsic size
+- `style={{ height: "auto", maxWidth: "100%", width: "100%" }}`: Fills container
+- `viewBox="0 0 256 256"`: Maintains proper scaling
+
+<Info>
+The `size` prop defines the viewBox coordinates, while the `style` prop controls the actual rendered dimensions.
+</Info>
+
+## Container Styling Patterns
+
+### Centered with Max Width
+
+```javascript
+<div style={{
+  height: "auto",
+  margin: "0 auto",
+  maxWidth: 200,
+  width: "100%"
+}}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value="https://example.com"
+    viewBox="0 0 256 256"
+  />
+</div>
+```
+
+### Full Width on Mobile, Fixed on Desktop
+
+```javascript
+<div style={{
+  height: "auto",
+  margin: "0 auto",
+  maxWidth: 300,
+  width: "100%",
+  padding: "0 16px"
+}}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value="https://example.com"
+    viewBox="0 0 256 256"
+  />
+</div>
+```
+
+### Responsive Grid
+
+```javascript
+<div style={{
+  display: "grid",
+  gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+  gap: "20px"
+}}>
+  {items.map((item) => (
+    <div key={item.id} style={{ height: "auto", width: "100%" }}>
+      <QRCode
+        size={256}
+        style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+        value={item.url}
+        viewBox="0 0 256 256"
+      />
+    </div>
+  ))}
+</div>
+```
+
+## Max-Width and Height Auto Pattern
+
+The key to responsive QR codes is combining these CSS properties:
+
+```css
+height: auto;      /* Maintains aspect ratio */
+maxWidth: 100%;    /* Prevents overflow */
+width: 100%;       /* Fills container */
+```
+
+### Example with Different Containers
+
+<CodeGroup>
+```javascript Small Container (100px)
+<div style={{ maxWidth: 100, width: "100%" }}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value="Small"
+    viewBox="0 0 256 256"
+  />
+</div>
+```
+
+```javascript Medium Container (200px)
+<div style={{ maxWidth: 200, width: "100%" }}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value="Medium"
+    viewBox="0 0 256 256"
+  />
+</div>
+```
+
+```javascript Large Container (400px)
+<div style={{ maxWidth: 400, width: "100%" }}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value="Large"
+    viewBox="0 0 256 256"
+  />
+</div>
+```
+</CodeGroup>
+
+## ViewBox Explanation
+
+The `viewBox` attribute defines the coordinate system for the SVG. From the implementation (src/QRCodeSvg/index.js:17):
+
+```javascript
+<svg viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} ...>
+```
+
+### Syntax
+
+```
+viewBox="min-x min-y width height"
+```
+
+For QR codes:
+```javascript
+viewBox="0 0 256 256"
+```
+
+- **0 0**: Starting coordinates (top-left corner)
+- **256 256**: Coordinate system dimensions
+
+### Why ViewBox Matters
+
+The viewBox allows the SVG to scale while maintaining correct proportions:
+
+```javascript
+// Without viewBox - fixed size
+<QRCode size={256} value="test" />
+// Renders at exactly 256×256px
+
+// With viewBox - responsive
+<QRCode
+  size={256}
+  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+  value="test"
+  viewBox="0 0 256 256"
+/>
+// Scales to container while maintaining 1:1 aspect ratio
+```
+
+<Warning>
+Always ensure the viewBox dimensions match the `size` prop. Using `viewBox="0 0 256 256"` with `size={256}` ensures accurate scaling.
+</Warning>
+
+## Responsive Examples
+
+### Card Layout
+
+```javascript
+function QRCard({ title, url }) {
+  return (
+    <div style={{
+      border: "1px solid #e5e7eb",
+      borderRadius: "8px",
+      padding: "24px",
+      maxWidth: "300px",
+      margin: "0 auto"
+    }}>
+      <h3 style={{ marginBottom: "16px", textAlign: "center" }}>{title}</h3>
+      <div style={{
+        background: "white",
+        padding: "16px",
+        borderRadius: "4px"
+      }}>
+        <QRCode
+          size={256}
+          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+          value={url}
+          viewBox="0 0 256 256"
+        />
+      </div>
+    </div>
+  );
+}
+```
+
+### Flex Container
+
+```javascript
+<div style={{
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  minHeight: "100vh",
+  padding: "20px"
+}}>
+  <div style={{ maxWidth: "250px", width: "100%" }}>
+    <QRCode
+      size={256}
+      style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+      value="https://example.com"
+      viewBox="0 0 256 256"
+    />
+  </div>
+</div>
+```
+
+### Media Query with Inline Styles
+
+```javascript
+function ResponsiveQR({ value }) {
+  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
+
+  React.useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const maxWidth = windowWidth < 768 ? 150 : 300;
+
+  return (
+    <div style={{ maxWidth, width: "100%", margin: "0 auto" }}>
+      <QRCode
+        size={256}
+        style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+        value={value}
+        viewBox="0 0 256 256"
+      />
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+<Info>
+**Always use these three properties together:**
+1. Container with `maxWidth` and `width: "100%"`
+2. QR code with `style={{ height: "auto", maxWidth: "100%", width: "100%" }}`
+3. ViewBox matching the size prop: `viewBox="0 0 {size} {size}"`
+</Info>
+
+<Note>
+**Performance tip:** The `size` prop should remain constant even for responsive designs. Use CSS for scaling, not dynamic size changes.
+</Note>
+
+### Minimum Sizes
+
+For scanability, ensure QR codes don't scale below:
+- **Simple data**: 100×100px minimum
+- **URLs**: 150×150px recommended
+- **Complex data**: 200×200px or larger
+
+```javascript
+<div style={{
+  minWidth: "150px",
+  maxWidth: "300px",
+  width: "100%"
+}}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value={longUrl}
+    viewBox="0 0 256 256"
+  />
+</div>
+```

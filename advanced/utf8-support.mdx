@@ -1,0 +1,95 @@
+---
+title: UTF-8 Text Support
+description: Learn how react-qr-code handles non-ASCII text like Korean, Japanese, and emoji with automatic UTF-8 encoding
+---
+
+## Overview
+
+`react-qr-code` encodes data in UTF-8 byte mode to ensure non-ASCII text (e.g., Korean, Japanese, emoji) renders and scans correctly. This means you can pass any Unicode text as a normal JavaScript string without any additional encoding required.
+
+<Info>
+No additional encoding is required on your side. The library automatically handles UTF-8 conversion internally.
+</Info>
+
+## How It Works
+
+The library uses the `encodeStringToUtf8Bytes` function to convert JavaScript strings to UTF-8 byte arrays:
+
+```javascript
+function encodeStringToUtf8Bytes(input) {
+  return Array.from(new TextEncoder().encode(input));
+}
+```
+
+This encoding happens automatically in `src/index.js:26` when you provide a `value` prop. The UTF-8 bytes are then converted to a binary string and encoded in byte mode:
+
+```javascript
+const utf8Bytes = encodeStringToUtf8Bytes(value);
+const binaryString = bytesToBinaryString(utf8Bytes);
+qrcode.addData(binaryString, "Byte");
+```
+
+## Usage Examples
+
+Just pass a normal JavaScript string with any Unicode characters:
+
+### Korean Text
+
+```javascript
+<QRCode value="한글 테스트 😊" />
+```
+
+### Japanese Text
+
+```javascript
+<QRCode value="こんにちは" />
+```
+
+### Mixed Content with Emoji
+
+```javascript
+<QRCode value="Hello 世界 🌍" />
+```
+
+### Testing Example
+
+```javascript
+<QRCode value="안녕하세요" />
+```
+
+<Tip>
+All of these examples will scan correctly on any modern QR code reader or smartphone camera app.
+</Tip>
+
+## Testing UTF-8 Locally
+
+To test UTF-8 encoding with the demo app:
+
+1. **Build the demo library bundle in watch mode:**
+   - In one terminal: `npm run demo-web-watch`
+
+2. **Run the demo app:**
+   - In another terminal: `npm run demo`
+
+3. **Test with non-ASCII values:**
+   - Open the demo in your browser (Expo starts it automatically)
+   - Type a non-ASCII value into the input:
+     - Korean: `안녕하세요`
+     - Japanese: `こんにちは`
+     - Emoji: Any emoji character
+
+4. **Scan and verify:**
+   - Scan the generated QR code with a phone camera app
+   - The decoded text should match exactly what you typed
+
+<Note>
+The library uses the browser's native `TextEncoder` API, which provides reliable UTF-8 encoding across all modern browsers and React Native environments.
+</Note>
+
+## Character Limits
+
+According to the [official QR spec](https://www.qrcode.com/en/about/version.html), the library can store up to **2953 characters** in the `value` prop. This limit applies to UTF-8 encoded data in byte mode.
+
+<Warning>
+While UTF-8 encoding is automatic, remember that multi-byte characters (like emoji and CJK characters) count as multiple bytes toward the 2953 character limit.
+</Warning>

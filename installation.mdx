@@ -1,0 +1,104 @@
+---
+title: Installation
+description: Install react-qr-code in your React or React Native project
+---
+
+## React Web Installation
+
+<Steps>
+  <Step title="Install the package">
+    Choose your preferred package manager to install react-qr-code:
+
+    <CodeGroup>
+    ```bash npm
+    npm i react-qr-code
+    ```
+
+    ```bash yarn
+    yarn add react-qr-code
+    ```
+
+    ```bash pnpm
+    pnpm add react-qr-code
+    ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Verify installation">
+    Import the component in your React application:
+
+    ```javascript
+    import QRCode from "react-qr-code";
+    ```
+  </Step>
+</Steps>
+
+<Note>
+  **Peer Dependency:** react-qr-code requires React ^19.2.3 as a peer dependency.
+</Note>
+
+## React Native Installation
+
+When using this library with React Native, you'll need additional setup for SVG support.
+
+<Steps>
+  <Step title="Install react-qr-code">
+    <CodeGroup>
+    ```bash npm
+    npm i react-qr-code
+    ```
+
+    ```bash yarn
+    yarn add react-qr-code
+    ```
+
+    ```bash pnpm
+    pnpm add react-qr-code
+    ```
+    </CodeGroup>
+  </Step>
+
+  <Step title="Install react-native-svg">
+    React Native requires the `react-native-svg` library to render SVG elements.
+
+    <CodeGroup>
+    ```bash npm
+    npm i react-native-svg
+    ```
+
+    ```bash yarn
+    yarn add react-native-svg
+    ```
+
+    ```bash pnpm
+    pnpm add react-native-svg
+    ```
+    </CodeGroup>
+
+    See the [react-native-svg installation guide](https://github.com/react-native-svg/react-native-svg#installation) for more details.
+  </Step>
+
+  <Step title="Install iOS dependencies">
+    For iOS, install the CocoaPods dependencies:
+
+    ```bash
+    cd ios && pod install
+    ```
+  </Step>
+
+  <Step title="Verify installation">
+    Import the component in your React Native application:
+
+    ```javascript
+    import QRCode from "react-qr-code";
+    ```
+  </Step>
+</Steps>
+
+<Info>
+  The `react-native-svg` dependency is required for React Native but is not automatically installed. Make sure to install it separately.
+</Info>
+
+## Next Steps
+
+Now that you have react-qr-code installed, head over to the [Quickstart](/quickstart) guide to create your first QR code.

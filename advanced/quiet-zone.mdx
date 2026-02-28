@@ -1,0 +1,188 @@
+---
+title: Quiet Zone Best Practices
+description: Learn why the quiet zone is essential for QR code scanning and how to implement it properly
+---
+
+## What is a Quiet Zone?
+
+The quiet zone (also called the "clear zone" or "margin") is the empty white space surrounding a QR code. It's a critical requirement of the QR code specification that ensures reliable scanning by providing visual separation from surrounding elements.
+
+<Warning>
+If the QR code is likely to appear next to dark objects, you will need to wrap it in a light-colored container to preserve the quiet zone.
+</Warning>
+
+## Why the Quiet Zone is Needed
+
+QR code readers need the quiet zone to:
+
+- Detect the edges of the QR code
+- Distinguish the code from surrounding content
+- Properly identify the position markers (three squares in the corners)
+- Calculate the correct orientation and size
+
+### Problems Without a Quiet Zone
+
+- **Failed scans**: Readers may not detect the QR code at all
+- **Misalignment**: The code may be detected but incorrectly oriented
+- **Data corruption**: Dark objects nearby can interfere with the code's data
+- **Reduced reliability**: Scanning becomes inconsistent, especially in poor lighting
+
+<Info>
+The QR code specification recommends a quiet zone of at least 4 modules (the width of four of the smallest squares in the QR code) on all sides.
+</Info>
+
+## Implementation
+
+### Basic Container Pattern
+
+Wrap your QR code in a container with a white background and padding:
+
+```javascript
+<div style={{ background: 'white', padding: '16px' }}>
+  <QRCode value="https://example.com" />
+</div>
+```
+
+This is the recommended approach from the README and ensures proper quiet zone preservation.
+
+### Why This Works
+
+- **White background**: Provides the light-colored space required for the quiet zone
+- **Padding**: Creates the necessary margin on all sides
+- **Consistent spacing**: Ensures the quiet zone is maintained regardless of the parent container
+
+## Complete Examples
+
+### Example 1: Basic Usage with Quiet Zone
+
+```javascript
+import React from "react";
+import QRCode from "react-qr-code";
+
+function MyQRCode() {
+  return (
+    <div style={{ background: 'white', padding: '16px' }}>
+      <QRCode value="https://example.com" />
+    </div>
+  );
+}
+```
+
+### Example 2: Responsive QR Code with Quiet Zone
+
+```javascript
+import React from "react";
+import QRCode from "react-qr-code";
+
+function ResponsiveQRCode({ value }) {
+  return (
+    <div style={{ background: 'white', padding: '16px' }}>
+      <div style={{ 
+        height: "auto", 
+        margin: "0 auto", 
+        maxWidth: 64, 
+        width: "100%" 
+      }}>
+        <QRCode
+          size={256}
+          style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+          value={value}
+          viewBox={`0 0 256 256`}
+        />
+      </div>
+    </div>
+  );
+}
+```
+
+### Example 3: Styled Container
+
+```javascript
+import React from "react";
+import QRCode from "react-qr-code";
+
+function StyledQRCode({ value }) {
+  return (
+    <div style={{
+      background: 'white',
+      padding: '16px',
+      borderRadius: '8px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+    }}>
+      <QRCode value={value} />
+    </div>
+  );
+}
+```
+
+<Tip>
+A padding of 16px is generally sufficient for QR codes of typical size (256px). For smaller codes, you can reduce the padding proportionally, but never eliminate it entirely.
+</Tip>
+
+## Common Scenarios
+
+### Dark Background Page
+
+When your page has a dark background, the white container becomes essential:
+
+```javascript
+<div style={{ background: '#1a1a1a', padding: '32px' }}>
+  <div style={{ background: 'white', padding: '16px' }}>
+    <QRCode value="https://example.com" />
+  </div>
+</div>
+```
+
+### Adjacent to Dark Content
+
+When placing QR codes near images, text, or other dark elements:
+
+```javascript
+<div style={{ display: 'flex', gap: '20px' }}>
+  <img src="dark-image.jpg" alt="Product" />
+  
+  <div style={{ background: 'white', padding: '16px' }}>
+    <QRCode value="https://example.com/product" />
+  </div>
+</div>
+```
+
+### Print Materials
+
+For printed materials, ensure the design preserves the quiet zone:
+
+```javascript
+<div style={{
+  background: 'white',
+  padding: '20px',
+  border: '1px solid #e0e0e0'
+}}>
+  <QRCode value="https://example.com" size={200} />
+</div>
+```
+
+<Note>
+When designing for print, consider using slightly larger padding (20-24px) to account for printing tolerances and paper handling.
+</Note>
+
+## Best Practices
+
+1. **Always use a white container**: Even if your background is light-colored, use pure white (`#FFFFFF` or `white`) for maximum contrast
+
+2. **Maintain consistent padding**: Use at least 16px of padding on all sides for standard-sized QR codes (256px)
+
+3. **Scale padding proportionally**: For smaller QR codes, reduce padding accordingly, but maintain the ratio
+
+4. **Test in context**: Generate and scan your QR codes in the actual environment where they'll be used
+
+5. **Avoid transparent backgrounds**: Never use `background: 'transparent'` unless you're certain the parent has a white background
+
+6. **Consider the full layout**: Think about what will surround the QR code in the final design
+
+## Further Reading
+
+For more information about the quiet zone requirement, see the [QR World reference on quiet zones](https://qrworld.wordpress.com/2011/08/09/the-quiet-zone/).
+
+<Warning>
+Ignoring the quiet zone can result in QR codes that work in testing but fail in production environments. Always test with the container in place.
+</Warning>

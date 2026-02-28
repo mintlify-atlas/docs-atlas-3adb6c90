@@ -1,0 +1,444 @@
+---
+title: React Native
+description: Use react-qr-code in React Native applications with iOS and Android support
+---
+
+## Installation
+
+### Install react-qr-code
+
+First, install the main package:
+
+```bash
+npm i react-qr-code
+```
+
+### Install react-native-svg
+
+React Native support requires [react-native-svg](https://github.com/react-native-svg/react-native-svg) as a peer dependency:
+
+```bash
+npm i react-native-svg
+```
+
+### iOS Setup
+
+For iOS, install the CocoaPods dependencies:
+
+```bash
+cd ios && pod install
+```
+
+<Info>
+Make sure you have CocoaPods installed. If not, run `sudo gem install cocoapods`.
+</Info>
+
+### Android Setup
+
+No additional setup is required for Android. The library will work after installing the npm packages.
+
+## Basic Usage
+
+The import and usage pattern is identical to web:
+
+```javascript
+import React from "react";
+import { View } from "react-native";
+import QRCode from "react-qr-code";
+
+function App() {
+  return (
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <QRCode value="https://example.com" />
+    </View>
+  );
+}
+
+export default App;
+```
+
+## Platform Differences
+
+The library automatically uses the correct implementation based on the platform:
+
+### Web Implementation
+
+From `src/QRCodeSvg/index.js:15-22`:
+
+```javascript
+const QRCodeSvg = forwardRef(
+  ({ bgColor, bgD, fgD, fgColor, size, title, viewBoxSize, xmlns = "http://www.w3.org/2000/svg", ...props }, ref) => (
+    <svg {...props} height={size} ref={ref} viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} width={size} xmlns={xmlns}>
+      {title ? <title>{title}</title> : null}
+      <path d={bgD} fill={bgColor} />
+      <path d={fgD} fill={fgColor} />
+    </svg>
+  ),
+);
+```
+
+### React Native Implementation
+
+From `src/QRCodeSvg/index.native.js:14-19`:
+
+```javascript
+const QRCodeSvg = forwardRef(({ bgColor, bgD, fgD, fgColor, size, viewBoxSize, ...props }, ref) => (
+  <Svg {...props} height={size} ref={ref} style={{ height: size, width: size }} viewBox={`0 0 ${viewBoxSize} ${viewBoxSize}`} width={size}>
+    <Path d={bgD} fill={bgColor} />
+    <Path d={fgD} fill={fgColor} />
+  </Svg>
+));
+```
+
+### Key Differences
+
+<CodeGroup>
+```javascript Web
+import { svg, path } from 'html'
+
+<svg>
+  <title>Optional title</title>
+  <path />
+</svg>
+```
+
+```javascript React Native
+import { Svg, Path } from 'react-native-svg'
+
+<Svg style={{ height: size, width: size }}>
+  {/* No title support */}
+  <Path />
+</Svg>
+```
+</CodeGroup>
+
+**Notable differences:**
+1. **Components**: Native uses `Svg` and `Path` from `react-native-svg` instead of HTML elements
+2. **Title**: The `title` prop is not available on React Native (index.native.js:14)
+3. **Style**: Native implementation includes an inline style for dimensions (index.native.js:15)
+4. **xmlns**: Not needed on React Native
+
+## Supported Props
+
+All core props work on both iOS and Android:
+
+| Prop | Type | Default | Platform |
+|------|------|---------|----------|
+| `value` | `string` | **required** | iOS, Android |
+| `size` | `number` | `256` | iOS, Android |
+| `bgColor` | `string` | `'#FFFFFF'` | iOS, Android |
+| `fgColor` | `string` | `'#000000'` | iOS, Android |
+| `level` | `'L' \| 'M' \| 'Q' \| 'H'` | `'L'` | iOS, Android |
+| `title` | `string` | - | **Web only** |
+
+<Warning>
+The `title` prop is web-only and will be ignored on React Native platforms.
+</Warning>
+
+## iOS Example
+
+Here's a complete iOS example with styling:
+
+```javascript
+import React from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import QRCode from "react-qr-code";
+
+function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Scan QR Code</Text>
+        <View style={styles.qrContainer}>
+          <QRCode
+            value="https://github.com/rosskhanas/react-qr-code"
+            size={200}
+            bgColor="#ffffff"
+            fgColor="#000000"
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  qrContainer: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+});
+
+export default App;
+```
+
+## Android Example
+
+Android example with Material Design styling:
+
+```javascript
+import React from "react";
+import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import QRCode from "react-qr-code";
+
+function App() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <Text style={styles.title}>Scan QR Code</Text>
+        <View style={styles.qrContainer}>
+          <QRCode
+            value="https://github.com/rosskhanas/react-qr-code"
+            size={200}
+            bgColor="#ffffff"
+            fgColor="#000000"
+            level="M"
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fafafa",
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 16,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "600",
+    marginBottom: 24,
+    color: "#212121",
+  },
+  qrContainer: {
+    backgroundColor: "#ffffff",
+    padding: 24,
+    borderRadius: 8,
+    elevation: 4,
+  },
+});
+
+export default App;
+```
+
+## Screenshots
+
+The library provides consistent QR codes across platforms:
+
+<CardGroup cols={2}>
+  <Card title="Android">
+    ![Android Screenshot](https://github.com/rosskhanas/react-qr-code/blob/master/demo-android.png)
+  </Card>
+  <Card title="iOS">
+    ![iOS Screenshot](https://github.com/rosskhanas/react-qr-code/blob/master/demo-ios.png)
+  </Card>
+</CardGroup>
+
+## Dynamic QR Codes
+
+Update QR codes based on user input:
+
+```javascript
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet, TextInput, View } from "react-native";
+import QRCode from "react-qr-code";
+
+function App() {
+  const [text, setText] = useState("https://example.com");
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.content}>
+        <TextInput
+          style={styles.input}
+          value={text}
+          onChangeText={setText}
+          placeholder="Enter text or URL"
+        />
+        <View style={styles.qrContainer}>
+          <QRCode
+            value={text}
+            size={220}
+            bgColor="#ffffff"
+            fgColor="#1a56db"
+          />
+        </View>
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#f5f5f5",
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
+  input: {
+    width: "100%",
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 8,
+    padding: 12,
+    marginBottom: 30,
+    backgroundColor: "#ffffff",
+    fontSize: 16,
+  },
+  qrContainer: {
+    backgroundColor: "#ffffff",
+    padding: 20,
+    borderRadius: 10,
+  },
+});
+
+export default App;
+```
+
+## Common Patterns
+
+### Centering QR Codes
+
+```javascript
+<View style={{
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center"
+}}>
+  <QRCode value="centered" />
+</View>
+```
+
+### Adding Quiet Zone
+
+Wrap in a container with padding (recommended 16px minimum):
+
+```javascript
+<View style={{
+  backgroundColor: "white",
+  padding: 16
+}}>
+  <QRCode value="with quiet zone" />
+</View>
+```
+
+### Multiple QR Codes
+
+```javascript
+import React from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import QRCode from "react-qr-code";
+
+const data = [
+  { id: "1", url: "https://example.com/1" },
+  { id: "2", url: "https://example.com/2" },
+  { id: "3", url: "https://example.com/3" },
+];
+
+function App() {
+  return (
+    <FlatList
+      data={data}
+      keyExtractor={(item) => item.id}
+      renderItem={({ item }) => (
+        <View style={styles.item}>
+          <QRCode value={item.url} size={150} />
+        </View>
+      )}
+      contentContainerStyle={styles.list}
+    />
+  );
+}
+
+const styles = StyleSheet.create({
+  list: {
+    padding: 20,
+  },
+  item: {
+    backgroundColor: "white",
+    padding: 20,
+    marginBottom: 15,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+});
+```
+
+## Troubleshooting
+
+### react-native-svg not found
+
+If you see this error:
+```
+Error: Unable to resolve module `react-native-svg`
+```
+
+**Solution:**
+1. Install react-native-svg: `npm i react-native-svg`
+2. For iOS: `cd ios && pod install`
+3. Rebuild your app
+
+### QR Code not visible
+
+If the QR code doesn't appear:
+
+<Steps>
+  <Step title="Check background color">
+    Ensure the container background differs from `bgColor`
+  </Step>
+  <Step title="Verify value prop">
+    Confirm `value` is a non-empty string
+  </Step>
+  <Step title="Check size">
+    Ensure `size` is appropriate for your layout (default: 256)
+  </Step>
+</Steps>
+
+### Platform-specific imports
+
+The library automatically uses the correct implementation. You don't need to:
+
+```javascript
+// ❌ Don't do this
+import QRCode from "react-qr-code/native";
+
+// ✅ Do this
+import QRCode from "react-qr-code";
+```
+
+React Native's bundler automatically resolves `index.native.js` when available.
+
+<Note>
+The library handles platform differences automatically through React Native's `.native.js` file extension convention.
+</Note>

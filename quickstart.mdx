@@ -1,80 +1,89 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Create your first QR code in minutes
 ---
 
-## Get started in three steps
+## Your First QR Code
 
-Get your documentation site running locally and make your first customization.
+Get started with react-qr-code in just a few steps.
 
-### Step 1: Set up your local environment
+<Steps>
+  <Step title="Import the component">
+    Import the QRCode component into your React or React Native file:
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
-    
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
-    
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    ```javascript
+    import React from "react";
+    import QRCode from "react-qr-code";
+    ```
+  </Step>
 
-### Step 2: Deploy your changes
+  <Step title="Render the QR code">
+    Add the `<QRCode />` component with a `value` prop:
 
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
-    
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    ```javascript
+    import React from "react";
+    import ReactDOM from "react-dom";
+    import QRCode from "react-qr-code";
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+    ReactDOM.render(<QRCode value="hey" />, document.getElementById("Container"));
+    ```
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+    The `value` prop is the only required prop and contains the data you want to encode in the QR code.
+  </Step>
 
-### Step 3: Go live
+  <Step title="Test it out">
+    Run your application and scan the QR code with your phone's camera app. It should decode to the text you provided in the `value` prop.
+  </Step>
+</Steps>
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+## Understanding the Value Prop
 
-## Next steps
+The `value` prop is a string that contains the data to be encoded in the QR code:
 
-Now that you have your docs running, explore these key features:
+- Can be any text, URL, or data string
+- Supports up to 2953 characters (per the [official QR spec](https://www.qrcode.com/en/about/version.html))
+- Automatically handles UTF-8 encoding for non-ASCII characters
+
+```javascript
+// URL example
+<QRCode value="https://example.com" />
+
+// Text example
+<QRCode value="Hello, World!" />
+
+// UTF-8 example (Korean, emoji)
+<QRCode value="한글 테스트 😊" />
+```
+
+<Tip>
+  No additional encoding is required for non-ASCII text. Just pass a normal JavaScript string and react-qr-code will handle the UTF-8 encoding automatically.
+</Tip>
+
+## Important Note: Quiet Zone
+
+If the QR code is likely to appear next to dark objects, you'll need to wrap it in a light-colored container to preserve the '[quiet zone](https://qrworld.wordpress.com/2011/08/09/the-quiet-zone/)' - the white space around the QR code that helps scanners detect it:
+
+```javascript
+<div style={{ background: 'white', padding: '16px' }}>
+  <QRCode value="your-value-here" />
+</div>
+```
+
+## Next Steps
+
+Now that you have a basic QR code working, explore more features:
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Basic Usage" icon="code" href="/usage/basic-usage">
+    Learn more usage patterns and examples
+  </Card>
+  <Card title="Styling" icon="palette" href="/usage/styling">
+    Customize colors, size, and make responsive QR codes
+  </Card>
+  <Card title="API Reference" icon="book" href="/api/qrcode-component">
+    View all available props and options
+  </Card>
+  <Card title="React Native" icon="mobile" href="/usage/react-native">
+    Platform-specific setup and tips
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

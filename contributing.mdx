@@ -1,0 +1,158 @@
+---
+title: Contributing
+description: Guide to contributing to react-qr-code development
+---
+
+Thank you for your interest in contributing to react-qr-code! This guide will help you get started with development and contributions.
+
+## Development Setup
+
+Follow these steps to set up your local development environment:
+
+<Steps>
+  <Step title="Clone the repository">
+    ```bash
+    git clone git@github.com:rosskhanas/react-qr-code.git
+    cd react-qr-code
+    ```
+  </Step>
+
+  <Step title="Install dependencies">
+    ```bash
+    npm install
+    ```
+  </Step>
+
+  <Step title="Build the library">
+    ```bash
+    npm run build
+    ```
+  </Step>
+
+  <Step title="Run the demo (optional)">
+    ```bash
+    npm run demo
+    ```
+    This will start the Expo demo app where you can test your changes.
+  </Step>
+</Steps>
+
+## Testing UTF-8 Locally
+
+To test non-ASCII character support (Korean, Japanese, emoji, etc.):
+
+<Steps>
+  <Step title="Start watch mode">
+    In one terminal, build the demo library bundle in watch mode:
+    ```bash
+    npm run demo-web-watch
+    ```
+  </Step>
+
+  <Step title="Run the demo app">
+    In another terminal, start the demo:
+    ```bash
+    npm run demo
+    ```
+  </Step>
+
+  <Step title="Test the QR code">
+    1. Open the demo in your browser (Expo starts it automatically)
+    2. Type a non-ASCII value into the input (e.g., `안녕하세요`, `こんにちは`, or an emoji)
+    3. Scan the QR code with a phone camera app
+    4. Verify the decoded text matches exactly
+  </Step>
+</Steps>
+
+## Available Scripts
+
+| Command | Description |
+| ------- | ----------- |
+| `npm run build` | Build the library for production |
+| `npm run demo` | Start the demo app |
+| `npm run demo-web-watch` | Build demo library in watch mode |
+| `npm run demo:build` | Build the demo for deployment |
+| `npm run lint` | Run linter and auto-fix issues |
+| `npm run clean` | Clean build artifacts |
+
+## Reporting Issues
+
+If you find a bug or have a feature request:
+
+1. Check if the issue already exists in the [GitHub Issues](https://github.com/rosskhanas/react-qr-code/issues)
+2. If not, create a new issue with:
+   - A clear, descriptive title
+   - Steps to reproduce (for bugs)
+   - Expected vs actual behavior
+   - Environment details (React version, platform, etc.)
+   - Code samples or screenshots if applicable
+
+## Pull Request Guidelines
+
+When submitting a pull request:
+
+<Steps>
+  <Step title="Fork and create a branch">
+    Fork the repository and create a new branch for your changes:
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+  </Step>
+
+  <Step title="Make your changes">
+    - Write clean, maintainable code
+    - Follow the existing code style
+    - Run `npm run lint` to check for issues
+    - Test your changes thoroughly
+  </Step>
+
+  <Step title="Commit your changes">
+    Use clear, descriptive commit messages:
+    ```bash
+    git commit -m "feat: add new feature"
+    # or
+    git commit -m "fix: resolve rendering issue"
+    ```
+  </Step>
+
+  <Step title="Push and create PR">
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+    Then open a pull request on GitHub with:
+    - A clear description of the changes
+    - Reference to any related issues
+    - Screenshots or examples if applicable
+  </Step>
+</Steps>
+
+## Code Review Process
+
+All contributions go through code review:
+
+1. A maintainer will review your PR
+2. You may be asked to make changes
+3. Once approved, your PR will be merged
+4. Your contribution will be included in the next release
+
+## License
+
+By contributing to react-qr-code, you agree that your contributions will be licensed under the [MIT License](https://github.com/rosskhanas/react-qr-code/blob/master/LICENSE).
+
+```
+MIT License
+
+Copyright (c) 2017 Ross Khanas
+```
+
+The full license text is available in the repository.
+
+## Questions?
+
+If you have questions about contributing:
+
+- Open a [GitHub Discussion](https://github.com/rosskhanas/react-qr-code/discussions)
+- Check existing issues and pull requests
+- Reach out to the maintainers
+
+Thank you for contributing to react-qr-code!

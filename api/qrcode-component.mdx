@@ -1,0 +1,121 @@
+---
+title: QRCode Component
+description: QR code SVG component for React and React Native
+---
+
+The `QRCode` component generates a QR code as an SVG element. It works seamlessly with both React (web) and React Native (using react-native-svg).
+
+## Import
+
+```javascript
+import QRCode from "react-qr-code";
+```
+
+## Basic Usage
+
+```javascript
+import React from "react";
+import QRCode from "react-qr-code";
+
+function App() {
+  return <QRCode value="https://example.com" />;
+}
+```
+
+## Type Signature
+
+The component is defined with the following TypeScript interface:
+
+```typescript
+interface QRCodeProps extends React.SVGProps<SVGSVGElement> {
+  value: string;
+  size?: number;
+  bgColor?: React.CSSProperties["backgroundColor"];
+  fgColor?: React.CSSProperties["color"];
+  level?: "L" | "M" | "H" | "Q";
+  title?: string;
+}
+```
+
+## Component Features
+
+### Extends SVGProps
+
+The `QRCode` component extends `React.SVGProps<SVGSVGElement>`, which means it accepts all standard SVG element props in addition to its custom props. This allows you to:
+
+- Apply custom styles via the `style` prop
+- Add CSS classes with `className`
+- Set accessibility attributes like `aria-label`
+- Use any other valid SVG element attribute
+
+**Example:**
+
+```javascript
+<QRCode
+  value="https://example.com"
+  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+  className="qr-code"
+  aria-label="QR code for example.com"
+/>
+```
+
+### forwardRef Support
+
+The component is wrapped with `React.forwardRef`, allowing you to pass a ref to access the underlying SVG element:
+
+```javascript
+import React, { useRef } from "react";
+import QRCode from "react-qr-code";
+
+function App() {
+  const qrRef = useRef(null);
+
+  const handleClick = () => {
+    console.log(qrRef.current); // Access the SVG element
+  };
+
+  return (
+    <>
+      <QRCode ref={qrRef} value="https://example.com" />
+      <button onClick={handleClick}>Log QR Code Element</button>
+    </>
+  );
+}
+```
+
+## Responsive QR Code
+
+To create a responsive QR code that scales with its container:
+
+```javascript
+<div style={{ height: "auto", margin: "0 auto", maxWidth: 64, width: "100%" }}>
+  <QRCode
+    size={256}
+    style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+    value="https://example.com"
+    viewBox="0 0 256 256"
+  />
+</div>
+```
+
+## Quiet Zone
+
+When the QR code appears next to dark objects, wrap it in a light-colored container to preserve the [quiet zone](https://qrworld.wordpress.com/2011/08/09/the-quiet-zone/):
+
+```javascript
+<div style={{ background: "white", padding: "16px" }}>
+  <QRCode value="https://example.com" />
+</div>
+```
+
+## UTF-8 Support
+
+The component automatically encodes data in UTF-8 byte mode, ensuring non-ASCII text (Korean, Japanese, emoji) renders and scans correctly:
+
+```javascript
+<QRCode value="한글 테스트 😊" />
+<QRCode value="こんにちは" />
+<QRCode value="Hello 世界 🌍" />
+```
+
+No additional encoding is required.

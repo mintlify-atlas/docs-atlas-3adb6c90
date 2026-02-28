@@ -1,0 +1,256 @@
+---
+title: Styling
+description: Customize the appearance of your QR codes with colors, sizes, and SVG properties
+---
+
+## Color Customization
+
+### Foreground and Background Colors
+
+The `fgColor` and `bgColor` props accept any valid CSS color string:
+
+<CodeGroup>
+```javascript Hex Colors
+<QRCode
+  value="Styled QR Code"
+  fgColor="#1a56db"
+  bgColor="#f3f4f6"
+/>
+```
+
+```javascript RGB Colors
+<QRCode
+  value="Styled QR Code"
+  fgColor="rgb(26, 86, 219)"
+  bgColor="rgb(243, 244, 246)"
+/>
+```
+
+```javascript Named Colors
+<QRCode
+  value="Styled QR Code"
+  fgColor="darkblue"
+  bgColor="lightgray"
+/>
+```
+</CodeGroup>
+
+### Default Values
+
+From the source code (src/index.js:24):
+- `bgColor` defaults to `"#FFFFFF"` (white)
+- `fgColor` defaults to `"#000000"` (black)
+
+### Brand Colors Example
+
+Create branded QR codes matching your design system:
+
+```javascript
+<QRCode
+  value="https://mybrand.com"
+  fgColor="#6366f1"  // Indigo-500
+  bgColor="#eef2ff"  // Indigo-50
+  size={200}
+/>
+```
+
+<Warning>
+Ensure sufficient contrast between foreground and background colors for reliable scanning. Dark foreground on light background works best.
+</Warning>
+
+## Size Adjustment
+
+### Fixed Size
+
+The `size` prop sets both width and height in pixels:
+
+```javascript
+<QRCode value="Small" size={128} />
+<QRCode value="Medium" size={256} />
+<QRCode value="Large" size={512} />
+```
+
+Default size is `256` pixels (src/index.js:24).
+
+### Comparing Sizes
+
+<CodeGroup>
+```javascript Small - 128px
+<QRCode
+  value="https://example.com"
+  size={128}
+/>
+```
+
+```javascript Medium - 256px
+<QRCode
+  value="https://example.com"
+  size={256}
+/>
+```
+
+```javascript Large - 512px
+<QRCode
+  value="https://example.com"
+  size={512}
+/>
+```
+</CodeGroup>
+
+## SVG Props
+
+The QRCode component extends `React.SVGProps<SVGSVGElement>` (types/index.d.ts:4), meaning you can pass any standard SVG attributes:
+
+### ClassName
+
+```javascript
+<QRCode
+  value="Styled with CSS"
+  className="qr-code-custom"
+/>
+```
+
+```css
+.qr-code-custom {
+  border: 2px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  background: white;
+}
+```
+
+### ID and ARIA Attributes
+
+```javascript
+<QRCode
+  value="Accessible QR Code"
+  id="contact-qr"
+  aria-label="QR code for contact information"
+  role="img"
+/>
+```
+
+### Title for Accessibility
+
+The `title` prop adds an accessible title to the SVG (web only):
+
+```javascript
+<QRCode
+  value="https://example.com"
+  title="Scan to visit our website"
+/>
+```
+
+This renders as:
+```xml
+<svg ...>
+  <title>Scan to visit our website</title>
+  <!-- QR code paths -->
+</svg>
+```
+
+<Info>
+The `title` prop is only available on web. React Native does not support SVG title elements.
+</Info>
+
+## Style Prop for Responsive Sizing
+
+Use the `style` prop to make QR codes responsive:
+
+```javascript
+<QRCode
+  value="Responsive QR Code"
+  size={256}
+  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+  viewBox="0 0 256 256"
+/>
+```
+
+### How It Works
+
+1. **size={256}**: Sets the base viewBox dimensions
+2. **style**: Overrides the default fixed dimensions
+   - `height: "auto"`: Maintains aspect ratio
+   - `maxWidth: "100%"`: Prevents overflow
+   - `width: "100%"`: Fills container
+3. **viewBox**: Ensures proper scaling (see Responsive Design page)
+
+## ViewBox Usage
+
+The `viewBox` attribute controls the coordinate system. From the README example (lines 60-61):
+
+```javascript
+<QRCode
+  size={256}
+  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+  value={value}
+  viewBox={`0 0 256 256`}
+/>
+```
+
+### ViewBox Syntax
+
+```
+viewBox="min-x min-y width height"
+```
+
+- **min-x, min-y**: Starting coordinates (usually `0 0`)
+- **width, height**: Should match the `size` prop for proper scaling
+
+<Note>
+The viewBox is automatically generated internally, but you can override it for responsive designs. Always ensure viewBox dimensions match the size prop.
+</Note>
+
+## Advanced Styling Examples
+
+### Bordered QR Code
+
+```javascript
+<div style={{ display: 'inline-block', border: '4px solid #000', padding: '20px', background: 'white' }}>
+  <QRCode
+    value="https://example.com"
+    size={200}
+  />
+</div>
+```
+
+### Rounded Corners with Shadow
+
+```javascript
+<QRCode
+  value="https://example.com"
+  size={256}
+  style={{
+    height: "auto",
+    maxWidth: "100%",
+    width: "100%",
+    borderRadius: "16px",
+    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+  }}
+/>
+```
+
+### CSS Variables for Theming
+
+```javascript
+<QRCode
+  value="Themed QR Code"
+  fgColor="var(--primary-color)"
+  bgColor="var(--background-color)"
+  size={256}
+/>
+```
+
+```css
+:root {
+  --primary-color: #1a56db;
+  --background-color: #f9fafb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #60a5fa;
+    --background-color: #1f2937;
+  }
+}
+```

@@ -1,0 +1,134 @@
+---
+title: Error Correction Levels
+description: Understand QR code error correction levels and how to choose the right level for your use case
+---
+
+## Overview
+
+QR codes include built-in error correction that allows them to remain scannable even when partially damaged, obscured, or dirty. `react-qr-code` supports all four standard error correction levels defined in the QR code specification.
+
+## Error Correction Levels
+
+The library supports four error correction levels through the `level` prop:
+
+| Level | Error Recovery Capacity | Use Case |
+|-------|------------------------|----------|
+| **L** (Low) | ~7% of data | Default level. Best for clean, well-lit environments where the QR code is unlikely to be damaged |
+| **M** (Medium) | ~15% of data | Balanced option for general use |
+| **Q** (Quartile) | ~25% of data | Good for environments where QR codes might get slightly damaged |
+| **H** (High) | ~30% of data | Best for harsh environments or when QR codes need to remain functional despite significant damage |
+
+<Info>
+The default error correction level is **L** (Low), as specified in `src/index.js:24`.
+</Info>
+
+## Usage
+
+Set the error correction level using the `level` prop:
+
+```javascript
+// Default (L)
+<QRCode value="https://example.com" />
+
+// Medium error correction
+<QRCode value="https://example.com" level="M" />
+
+// Quartile error correction
+<QRCode value="https://example.com" level="Q" />
+
+// High error correction
+<QRCode value="https://example.com" level="H" />
+```
+
+## How to Choose the Right Level
+
+### Use Level L (Low)
+
+- Digital displays (screens, monitors)
+- Clean printed materials
+- Indoor environments with good lighting
+- Short-term use
+- Maximum data capacity needed
+
+### Use Level M (Medium)
+
+- General printing on paper
+- Marketing materials
+- Indoor and outdoor use
+- Balanced between size and reliability
+
+### Use Level Q (Quartile)
+
+- Outdoor signage
+- Products with moderate wear and tear
+- Environments with variable lighting
+- Long-term durability needed
+
+### Use Level H (High)
+
+- Industrial equipment labels
+- Harsh outdoor environments
+- Products subject to heavy wear
+- Critical applications requiring maximum reliability
+- When embedding logos or images in the QR code
+
+<Tip>
+If you plan to overlay a logo or image on top of your QR code, use level **H** to ensure the code remains scannable.
+</Tip>
+
+## Trade-offs Between Levels
+
+### Data Capacity vs. Error Correction
+
+Higher error correction levels reduce the amount of data that can be stored:
+
+```javascript
+// More data capacity, less error correction
+<QRCode value={longString} level="L" />
+
+// Less data capacity, more error correction  
+<QRCode value={longString} level="H" />
+```
+
+<Warning>
+Higher error correction levels increase the QR code's complexity (more modules/pixels), which can make it harder to scan at smaller sizes.
+</Warning>
+
+### Size and Complexity
+
+As error correction increases:
+- QR codes become more complex (more black and white modules)
+- Larger physical size may be needed for reliable scanning
+- Processing time may increase slightly
+
+### Visual Density
+
+```javascript
+// Less dense, easier to scan at small sizes
+<QRCode value="test" level="L" size={128} />
+
+// More dense, may need larger size
+<QRCode value="test" level="H" size={256} />
+```
+
+<Note>
+The library uses the `qr.js` implementation with custom handling for the error correction level, as noted in `src/index.js:3-4`.
+</Note>
+
+## Technical Implementation
+
+The library maps the string level to the `ErrorCorrectLevel` enum from `qr.js`:
+
+```javascript
+const qrcode = new QRCodeImpl(-1, ErrorCorrectLevel[level]);
+```
+
+This ensures compatibility with the [official QR spec](https://www.qrcode.com/en/about/version.html) and allows storing up to 2953 characters depending on the chosen error correction level.
+
+## Best Practices
+
+1. **Start with L**: Use the default level L unless you have a specific reason to increase it
+2. **Test in context**: Generate QR codes and test them in the actual environment where they'll be used
+3. **Consider lifespan**: For temporary use, L or M is sufficient; for permanent installations, use Q or H
+4. **Balance size and reliability**: If your QR codes are small, use lower error correction to reduce density
+5. **Monitor data capacity**: If approaching the character limit, lower error correction levels provide more capacity

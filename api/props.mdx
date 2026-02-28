@@ -1,0 +1,154 @@
+---
+title: Props Reference
+description: Complete reference for QRCode component props
+---
+
+## Required Props
+
+<ParamField path="value" type="string" required>
+  The data to encode in the QR code. Can contain up to 2,953 characters according to the [official QR spec](https://www.qrcode.com/en/about/version.html).
+
+  Supports UTF-8 text including non-ASCII characters (Korean, Japanese, emoji, etc.).
+
+  **Platform availability:** web, iOS, Android
+
+  **Example:**
+  ```javascript
+  <QRCode value="https://example.com" />
+  <QRCode value="한글 테스트 😊" />
+  ```
+</ParamField>
+
+## Optional Props
+
+<ParamField path="size" type="number" default="256">
+  The width and height of the QR code in pixels. This sets the intrinsic size of the SVG element.
+
+  **Platform availability:** web, iOS, Android
+
+  **Example:**
+  ```javascript
+  <QRCode value="https://example.com" size={128} />
+  <QRCode value="https://example.com" size={512} />
+  ```
+</ParamField>
+
+<ParamField path="bgColor" type="React.CSSProperties['backgroundColor']" default="#FFFFFF">
+  The background color of the QR code. Accepts any valid CSS color value including hex, rgb, rgba, named colors, or CSS color objects.
+
+  **Platform availability:** web, iOS, Android
+
+  **Example:**
+  ```javascript
+  <QRCode value="https://example.com" bgColor="#FFFFFF" />
+  <QRCode value="https://example.com" bgColor="white" />
+  <QRCode value="https://example.com" bgColor="rgb(255, 255, 255)" />
+  <QRCode value="https://example.com" bgColor="transparent" />
+  ```
+</ParamField>
+
+<ParamField path="fgColor" type="React.CSSProperties['color']" default="#000000">
+  The foreground color of the QR code (the color of the QR code squares). Accepts any valid CSS color value including hex, rgb, rgba, named colors, or CSS color objects.
+
+  **Platform availability:** web, iOS, Android
+
+  **Example:**
+  ```javascript
+  <QRCode value="https://example.com" fgColor="#000000" />
+  <QRCode value="https://example.com" fgColor="black" />
+  <QRCode value="https://example.com" fgColor="rgb(0, 0, 0)" />
+  <QRCode value="https://example.com" fgColor="#1a73e8" />
+  ```
+</ParamField>
+
+<ParamField path="level" type="'L' | 'M' | 'Q' | 'H'" default="L">
+  The error correction level of the QR code. Higher levels provide better error recovery but result in larger QR codes.
+
+  According to the [official QR spec](https://www.qrcode.com/en/about/version.html):
+  - **L**: Low - ~7% of codewords can be restored
+  - **M**: Medium - ~15% of codewords can be restored
+  - **Q**: Quartile - ~25% of codewords can be restored
+  - **H**: High - ~30% of codewords can be restored
+
+  **Platform availability:** web, iOS, Android
+
+  **Example:**
+  ```javascript
+  <QRCode value="https://example.com" level="L" />
+  <QRCode value="https://example.com" level="M" />
+  <QRCode value="https://example.com" level="Q" />
+  <QRCode value="https://example.com" level="H" />
+  ```
+</ParamField>
+
+<ParamField path="title" type="string">
+  An optional title for the SVG element. This appears as a `<title>` element within the SVG, which can be used for accessibility purposes or as a tooltip in web browsers.
+
+  **Platform availability:** web only
+
+  **Example:**
+  ```javascript
+  <QRCode value="https://example.com" title="Scan to visit example.com" />
+  ```
+</ParamField>
+
+## Inherited SVG Props
+
+The `QRCode` component extends `React.SVGProps<SVGSVGElement>`, which means it accepts all standard SVG element props. Commonly used inherited props include:
+
+### style
+
+Apply inline styles to the SVG element:
+
+```javascript
+<QRCode
+  value="https://example.com"
+  style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+/>
+```
+
+### className
+
+Add CSS classes for styling:
+
+```javascript
+<QRCode value="https://example.com" className="my-qr-code" />
+```
+
+### viewBox
+
+Define the coordinate system for the SVG (useful for responsive designs):
+
+```javascript
+<QRCode value="https://example.com" viewBox="0 0 256 256" />
+```
+
+### aria-label
+
+Add accessibility labels:
+
+```javascript
+<QRCode value="https://example.com" aria-label="QR code for example.com" />
+```
+
+### onClick, onMouseEnter, etc.
+
+Attach event handlers:
+
+```javascript
+<QRCode
+  value="https://example.com"
+  onClick={() => console.log("QR code clicked")}
+  onMouseEnter={() => console.log("Mouse entered QR code")}
+/>
+```
+
+### id
+
+Set a unique identifier:
+
+```javascript
+<QRCode value="https://example.com" id="my-qr-code" />
+```
+
+Any other valid SVG element attribute can also be used.
